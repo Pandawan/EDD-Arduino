@@ -12,9 +12,11 @@ void setup() {
 }
 
 void loop() {
-  int sensorValue;
-  sensorValue = analogRead(sensorPin);
-  SetRGB(sensorValue);
+  int sensorValue = analogRead(sensorPin);
+  sensorValue = map(sensorValue, 700, 900, 0, 255);
+  sensorValue = constrain(sensorValue, 0, 255);
+  analogWrite(redPin, sensorValue);
+  analogWrite(greenPin, (255 - sensorValue));
 }
 
 void SetRGB(int rgbPosition) {
