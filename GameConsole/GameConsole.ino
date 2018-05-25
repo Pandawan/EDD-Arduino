@@ -307,7 +307,7 @@ void triviaLoop()
   // AppData 2 = Wrong Answer 1
   else if (appData == 2)
   {
-    displayText("Wrong!", "", 101);
+    displayText("Correct!", "", 101);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
@@ -317,7 +317,7 @@ void triviaLoop()
   // AppData 3 = Correct Answer 1
   else if (appData == 3)
   {
-    displayText("Correct!", "", 102);
+    displayText("Wrong!", "", 102);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
@@ -363,7 +363,7 @@ void triviaLoop()
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
-      appData = 7;
+      appData = 10;
     }
   }
   // AppData 9 = Correct Answer 3
@@ -373,33 +373,33 @@ void triviaLoop()
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
-      appData = 7;
+      appData = 10;
     }
   }
   // AppData 10 = Question 4
   else if (appData == 10)
   {
     lcd.clear();
-    pinAndScrollText((char *)F("[1] [Home] [2]"), 1, (char *)F("What animal lives the longest? 1. Ocean Quahog 2. Galapagos Turtoise"), 0, 300, 10, 11);
+    pinAndScrollText((char *)F("[1] [Home] [2]"), 1, (char *)F("What animal lives the longest? 1. Ocean Quahog 2. Galapagos Turtoise"), 0, 300, 11, 12);
   }
   // AppData 11 = Correct Answer 4
-  else if (appData == 8)
+  else if (appData == 11)
   {
     displayText("Correct!", "", 107);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
-      appData = 10;
+      appData = 13;
     }
   }
   // AppData 12 = Wrong Answer 4
-  else if (appData == 9)
+  else if (appData == 12)
   {
     displayText("Wrong!", "", 108);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
-      appData = 10;
+      appData = 13;
     }
   }
 }
@@ -457,31 +457,35 @@ void triviaLoop()
     flashCharSubstring(pinnedText, c, 0, l);
     lcd.setCursor(l % 2 == 0 ? LCDWIDTH / 2 - (l / 2) : LCDWIDTH / 2 - (l / 2) - 1, pinnedRow);
     lcd.print(c);
+    int wait = 0;
     while (n > 0)
     {
-      // Refresh button status
-      buttonManager();
-      // Check for Button press to exit it
-      if (buttonPress(homeBtn))
-      {
-        delay(50);
-        appData = 0;
-        consoleState = HOME;
-        break;
-      }
-      // Check for left btn press
-      if (buttonPress(leftBtn))
-      {
-        delay(50);
-        appData = leftData;
-        break;
-      }
-      // Check for right btn press
-      if (buttonPress(rightBtn))
-      {
-        delay(50);
-        appData = rightData;
-        break;
+      wait += 1;
+      if (wait > 5) {
+        // Refresh button status
+        buttonManager();
+        // Check for Button press to exit it
+        if (buttonPress(homeBtn))
+        {
+          delay(50);
+          appData = 0;
+          consoleState = HOME;
+          break;
+        }
+        // Check for left btn press
+        if (buttonPress(leftBtn))
+        {
+          delay(50);
+          appData = leftData;
+          break;
+        }
+        // Check for right btn press
+        if (buttonPress(rightBtn))
+        {
+          delay(50);
+          appData = rightData;
+          break;
+        }
       }
 
       // Regular logic
