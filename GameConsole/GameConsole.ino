@@ -253,10 +253,25 @@ void triviaLoop() {
   }
   else if (appData == 1) {
     lcd.clear();
-    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("Here is a pretty cool question"), 0, 300, 2, 3);
+    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("What is the capital of Djibouti? 1. Addis Ababa 2. Djibouti"), 0, 300, 2, 3);
   }
-  else if (appData == 2 || appData == 3) {
-    displayText("Hello", "FUCK ME", 101);
+  else if (appData == 2) {
+    displayText("Wrong!", 101);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
+      delay(50);
+      appData = 4;
+    }
+  }
+  else if (appData == 3) {
+    displayText("Correct!", 101);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
+      delay(50);
+      appData = 4;
+    }
+  }
+  else if (appData == 4) {
+    lcd.clear();
+    pinAndScrollText((char *) F("Text at bottom (doesn't scroll)"), 1, (char *) F("Text that can scroll"), 0, 300, 2, 3);
   }
 }
 
