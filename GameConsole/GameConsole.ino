@@ -302,7 +302,7 @@ void triviaLoop()
   else if (appData == 1)
   {
     lcd.clear();
-    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("What is the capital of Djibouti? 1. Djibouti 2. Addis Ababa"), 0, 300, 2, 3);
+    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("What is the capital of Djibouti? 1. Djibouti 2. Addis Ababa"), 0, 300, 2, 3);
   }
   // AppData 2 = Wrong Answer 1
   else if (appData == 2)
@@ -328,7 +328,7 @@ void triviaLoop()
   else if (appData == 4)
   {
     lcd.clear();
-    pinAndScrollText((char *)F("[1] [Home] [2]"), 1, (char *)F("What year was McDonald’s founded? 1. 1930 2. 1955"), 0, 300, 5, 6);
+    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("What year was McDonald’s founded? 1. 1930 2. 1955"), 0, 300, 2, 3);
   }
   // AppData 5 = Wrong Answer 2
   else if (appData == 5)
@@ -354,7 +354,7 @@ void triviaLoop()
   else if (appData == 7)
   {
     lcd.clear();
-    pinAndScrollText((char *)F("[1] [Home] [2]"), 1, (char *)F("How long was the life sentence in Finland in 2012? 1. 29 2. 17"), 0, 300, 8, 9);
+    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("How long was the life sentence in Finland in 2012? 1. 29 2. 17"), 0, 300, 2, 3);
   }
   // AppData 8 = Wrong Answer 3
   else if (appData == 8)
@@ -380,7 +380,7 @@ void triviaLoop()
   else if (appData == 10)
   {
     lcd.clear();
-    pinAndScrollText((char *)F("[1] [Home] [2]"), 1, (char *)F("What animal lives the longest? 1. Ocean Quahog 2. Galapagos Turtoise"), 0, 300, 11, 12);
+    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("What animal lives the longest? 1. Ocean Quahog 2. Galapagos Turtoise"), 0, 300, 2, 3);    
   }
   // AppData 11 = Correct Answer 4
   else if (appData == 11)
@@ -444,8 +444,7 @@ void triviaLoop()
     {
       lcd.clear();
       lcd.print(F("Error pinScroll"));
-      while (1)
-        ;
+      while (1);
     }
     int l = strlen(pinnedText);
     int ls = strlen(scrollingText);
