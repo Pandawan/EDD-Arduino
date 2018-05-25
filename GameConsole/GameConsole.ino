@@ -244,6 +244,7 @@ void homeLoop() {
 
 // Trivia are id 100-199
 void triviaLoop() {
+  // AppData 0 = Intro
   if (appData == 0) {
     displayText("Welcome 2 Trivia", "Press [L] or [R]", 100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
@@ -251,27 +252,73 @@ void triviaLoop() {
       appData = 1;
     }
   }
+  // AppData 1 = Question 1
   else if (appData == 1) {
     lcd.clear();
-    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("What is the capital of Djibouti? 1. Addis Ababa 2. Djibouti"), 0, 300, 2, 3);
+    pinAndScrollText((char *) F("[1]  [Home] [2]"), 1, (char *) F("What is the capital of Djibouti? 1. Djibouti 2. Addis Ababa"), 0, 300, 2, 3);
   }
+  // AppData 2 = Wrong Answer 1
   else if (appData == 2) {
-    displayText("Wrong!", 101);
+    displayText("Wrong!", "", 101);
     if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
       delay(50);
       appData = 4;
     }
   }
+  // AppData 3 = Correct Answer 1
   else if (appData == 3) {
-    displayText("Correct!", 101);
+    displayText("Correct!", "", 102);
     if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
       delay(50);
       appData = 4;
     }
   }
+  // AppData 4 = Question 2
   else if (appData == 4) {
     lcd.clear();
-    pinAndScrollText((char *) F("Text at bottom (doesn't scroll)"), 1, (char *) F("Text that can scroll"), 0, 300, 2, 3);
+    pinAndScrollText((char *) F("[1] [Home] [2]"), 1, (char *) F("What year was McDonald’s founded? 1. 1930 2. 1955"), 0, 300, 5, 6);
+  }
+  // AppData 5 = Wrong Answer 2
+  else if (appData == 5) {
+    displayText("Wrong!", "", 103);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
+      delay(50);
+      appData = 7;
+    }
+  } 
+  // AppData 6 = Correct Answer 2
+  else if (appData == 6) {
+    displayText("Correct!", "", 104);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
+      delay(50);
+      appData = 7;
+    }
+  }  
+  // AppData 7 = Question 3
+  else if (appData == 7) {
+    lcd.clear();
+    pinAndScrollText((char *) F("[1] [Home] [2]"), 1, (char *) F("How long was the life sentence in Finland in 2012? 1. 29 2. 17"), 0, 300, 8, 9);
+  }
+  // AppData 8 = Wrong Answer 3
+  else if (appData == 8) {
+    displayText("Wrong!", "", 105);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
+      delay(50);
+      appData = 7;
+    }
+  } 
+  // AppData 9 = Correct Answer 3
+  else if (appData == 9) {
+    displayText("Correct!", "", 106);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn)) {
+      delay(50);
+      appData = 7;
+    }
+  } 
+  // AppData 10 = Question 4
+  else if (appData == 10) {
+    lcd.clear();
+    pinAndScrollText((char *) F("[1] [Home] [2]"), 1, (char *) F("How long was the life sentence in Finland in 2012? 1. 29 2. 17"), 0, 300, 8, 9);
   }
 }
 
@@ -388,3 +435,4 @@ void flashCharSubstring(const char *str, char *buf, int inf, int sup) {
 }
 
 #pragma endregion
+
