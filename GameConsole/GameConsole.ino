@@ -370,18 +370,29 @@ void pinAndScrollText(char * pinnedText, int pinnedRow, char * scrollingText, in
   lcd.setCursor(l % 2 == 0 ? LCDWIDTH / 2 - (l / 2) : LCDWIDTH / 2 - (l / 2) - 1, pinnedRow);
   lcd.print(c);
   while (n > 0) {
+    // Refresh button status
+    buttonManager();
     // Check for Button press to exit it
-    homeButton();
+    if (buttonPress(homeBtn)) {
+      delay(50);
+      appData = 0;
+      consoleState = HOME;
+      break;
+    }
+    // Check for left btn press
     if (buttonPress(leftBtn)) {
-      delay(250);
+      delay(50);
       appData = leftData;
-      return;
+      break;
     }
+    // Check for right btn press
     if (buttonPress(rightBtn)) {
-      delay(250);
+      delay(50);
       appData = rightData;
-      return;
+      break;
     }
+
+    
     // Regular logic
     if (x > 0) {
       x--;
