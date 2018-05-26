@@ -77,24 +77,24 @@ void loop()
   }
 }
 
-#pragma region Button Manager &Press / Release System
+#pragma region Button Manager & Press/Release System
 
 void buttonManager()
 {
   // Home Btn check
   int homeState = digitalRead(homeBtn);
   // If currently pressed and wasn't pressed earlier
-  if (homeState && !lastButtonState[0])
+  if (homeState && lastButtonState[0] == 0)
   {
     // Set it as pressed
     buttonState[0] = 1;
   }
-  else if (homeState && lastButtonState[0])
+  else if (homeState && lastButtonState[0] == 1)
   {
     // Set it as button hold
     buttonState[0] = 3;
   }
-  else if (!homeState && lastButtonState[0])
+  else if (!homeState && lastButtonState[0] == 1)
   {
     // Set it as button release
     buttonState[0] = 2;
@@ -108,17 +108,17 @@ void buttonManager()
   // Left Btn check
   int leftState = digitalRead(leftBtn);
   // If currently pressed and wasn't pressed earlier
-  if (leftState && !lastButtonState[1])
+  if (leftState && lastButtonState[1] == 0)
   {
     // Set it as pressed
     buttonState[1] = 1;
   }
-  else if (homeState && lastButtonState[0])
+  else if (leftState && lastButtonState[0] == 1)
   {
     // Set it as button hold
     buttonState[1] = 3;
   }
-  else if (!leftState && lastButtonState[1])
+  else if (!leftState && lastButtonState[1] == 1)
   {
     // Set it as button release
     buttonState[1] = 2;
@@ -132,17 +132,17 @@ void buttonManager()
   // Right Btn check
   int rightState = digitalRead(rightBtn);
   // If currently pressed and wasn't pressed earlier
-  if (rightState && !lastButtonState[2])
+  if (rightState && lastButtonState[2] == 0)
   {
     // Set it as pressed
     buttonState[2] = 1;
   }
-  else if (homeState && lastButtonState[0])
+  else if (rightState && lastButtonState[0] == 1)
   {
     // Set it as button hold
     buttonState[2] = 3;
   }
-  else if (!rightState && lastButtonState[2])
+  else if (!rightState && lastButtonState[2] == 1)
   {
     // Set it as button release
     buttonState[2] = 2;
@@ -302,7 +302,7 @@ void triviaLoop()
   else if (appData == 1)
   {
     lcd.clear();
-    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("What is the capital of Djibouti? 1. Djibouti 2. Addis Ababa"), 0, 300, 2, 3);
+    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("What is the capital of Djibouti? 1. Djibouti 2. Addis Ababa"), 0, 300, 2, 3);
   }
   // AppData 2 = Wrong Answer 1
   else if (appData == 2)
@@ -328,7 +328,7 @@ void triviaLoop()
   else if (appData == 4)
   {
     lcd.clear();
-    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("What year was McDonald’s founded? 1. 1930 2. 1955"), 0, 300, 2, 3);
+    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("What year was McDonald’s founded? 1. 1930 2. 1955"), 0, 300, 2, 3);
   }
   // AppData 5 = Wrong Answer 2
   else if (appData == 5)
@@ -354,7 +354,7 @@ void triviaLoop()
   else if (appData == 7)
   {
     lcd.clear();
-    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("How long was the life sentence in Finland in 2012? 1. 29 2. 17"), 0, 300, 2, 3);
+    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("How long was the life sentence in Finland in 2012? 1. 29 2. 17"), 0, 300, 2, 3);
   }
   // AppData 8 = Wrong Answer 3
   else if (appData == 8)
@@ -380,7 +380,7 @@ void triviaLoop()
   else if (appData == 10)
   {
     lcd.clear();
-    pinAndScrollText((char *) F("[1]  [Home]  [2]"), 1, (char *) F("What animal lives the longest? 1. Ocean Quahog 2. Galapagos Turtoise"), 0, 300, 2, 3);    
+    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("What animal lives the longest? 1. Ocean Quahog 2. Galapagos Turtoise"), 0, 300, 2, 3);
   }
   // AppData 11 = Correct Answer 4
   else if (appData == 11)
@@ -404,33 +404,33 @@ void triviaLoop()
   }
 }
 
-  // Adventure are id 200-299
-  void adventureLoop()
-  {
-    displayText("Adventure App", "TODO", 200);
-  }
+// Adventure are id 200-299
+void adventureLoop()
+{
+  displayText("Adventure App", "TODO", 200);
+}
 
 #pragma region Display Utilities
-  // Display Text, use textId to prevent the same text from refreshing multiple times
-  void displayText(char topLine[], char botLine[], int textId)
+// Display Text, use textId to prevent the same text from refreshing multiple times
+void displayText(char topLine[], char botLine[], int textId)
+{
+  if (textId != lastTextId)
   {
-    if (textId != lastTextId)
-    {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print(topLine);
-      lcd.setCursor(0, 1);
-      lcd.print(botLine);
-      lastTextId = textId;
-    }
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(topLine);
+    lcd.setCursor(0, 1);
+    lcd.print(botLine);
+    lastTextId = textId;
   }
+}
 
 #pragma endregion
 
 #pragma region Pin and Scroll Text
-  /***** Using a sketch found online https://forum.arduino.cc/index.php?topic=216486.0 *****/
+/***** Using a sketch found online https://forum.arduino.cc/index.php?topic=216486.0 *****/
 
-  /* This procedure pins a given text in the center of a desired row while scrolling from right to left another given text on another desired row.
+/* This procedure pins a given text in the center of a desired row while scrolling from right to left another given text on another desired row.
     Parameters:
     char * pinnedText: pinned char string
     int pinnedRow: desired row for pinned String
@@ -438,89 +438,90 @@ void triviaLoop()
     int scrollingRow: desired row for scrolling String
     int v = scrolling speed expressed in milliseconds
 */
-  void pinAndScrollText(char *pinnedText, int pinnedRow, char *scrollingText, int scrollingRow, int v, int leftData, int rightData)
+void pinAndScrollText(char *pinnedText, int pinnedRow, char *scrollingText, int scrollingRow, int v, int leftData, int rightData)
+{
+  if (pinnedRow == scrollingRow || pinnedRow < 0 || scrollingRow < 0 || pinnedRow >= LCDHEIGHT || scrollingRow >= LCDHEIGHT || strlen(pinnedText) > LCDWIDTH || v < 0)
   {
-    if (pinnedRow == scrollingRow || pinnedRow < 0 || scrollingRow < 0 || pinnedRow >= LCDHEIGHT || scrollingRow >= LCDHEIGHT || strlen(pinnedText) > LCDWIDTH || v < 0)
+    lcd.clear();
+    lcd.print(F("Error pinScroll"));
+    while (1);
+  }
+  int l = strlen(pinnedText);
+  int ls = strlen(scrollingText);
+  int x = LCDWIDTH;
+  int n = ls + x;
+  int i = 0;
+  int j = 0;
+  char c[ls + 1];
+  flashCharSubstring(pinnedText, c, 0, l);
+  lcd.setCursor(l % 2 == 0 ? LCDWIDTH / 2 - (l / 2) : LCDWIDTH / 2 - (l / 2) - 1, pinnedRow);
+  lcd.print(c);
+  int wait = 0;
+  while (n > 0)
+  {
+    wait += 1;
+    if (wait > 5)
     {
-      lcd.clear();
-      lcd.print(F("Error pinScroll"));
-      while (1);
+      // Refresh button status
+      buttonManager();
+      // Check for Button press to exit it
+      if (buttonPress(homeBtn))
+      {
+        delay(50);
+        appData = 0;
+        consoleState = HOME;
+        break;
+      }
+      // Check for left btn press
+      if (buttonPress(leftBtn))
+      {
+        delay(50);
+        appData = leftData;
+        break;
+      }
+      // Check for right btn press
+      if (buttonPress(rightBtn))
+      {
+        delay(50);
+        appData = rightData;
+        break;
+      }
     }
-    int l = strlen(pinnedText);
-    int ls = strlen(scrollingText);
-    int x = LCDWIDTH;
-    int n = ls + x;
-    int i = 0;
-    int j = 0;
-    char c[ls + 1];
-    flashCharSubstring(pinnedText, c, 0, l);
-    lcd.setCursor(l % 2 == 0 ? LCDWIDTH / 2 - (l / 2) : LCDWIDTH / 2 - (l / 2) - 1, pinnedRow);
-    lcd.print(c);
-    int wait = 0;
-    while (n > 0)
-    {
-      wait += 1;
-      if (wait > 5) {
-        // Refresh button status
-        buttonManager();
-        // Check for Button press to exit it
-        if (buttonPress(homeBtn))
-        {
-          delay(50);
-          appData = 0;
-          consoleState = HOME;
-          break;
-        }
-        // Check for left btn press
-        if (buttonPress(leftBtn))
-        {
-          delay(50);
-          appData = leftData;
-          break;
-        }
-        // Check for right btn press
-        if (buttonPress(rightBtn))
-        {
-          delay(50);
-          appData = rightData;
-          break;
-        }
-      }
 
-      // Regular logic
-      if (x > 0)
+    // Regular logic
+    if (x > 0)
+    {
+      x--;
+    }
+    lcd.setCursor(x, scrollingRow);
+    if (n > LCDWIDTH)
+    {
+      j++;
+      i = (j > LCDWIDTH) ? i + 1 : 0;
+      flashCharSubstring(scrollingText, c, i, j);
+      lcd.print(c);
+    }
+    else
+    {
+      i = i > 0 ? i + 1 : 0;
+      if (n == ls)
       {
-        x--;
+        i++;
       }
-      lcd.setCursor(x, scrollingRow);
-      if (n > LCDWIDTH)
-      {
-        j++;
-        i = (j > LCDWIDTH) ? i + 1 : 0;
-        flashCharSubstring(scrollingText, c, i, j);
-        lcd.print(c);
-      }
-      else
-      {
-        i = i > 0 ? i + 1 : 0;
-        if (n == ls)
-        {
-          i++;
-        }
-        flashCharSubstring(scrollingText, c, i, j);
-        lcd.print(c);
-        lcd.setCursor(n - 1, scrollingRow);
-        lcd.print(' ');
-      }
-      n--;
-      if (n > 0)
-      {
-        delay(v);
-      }
+      flashCharSubstring(scrollingText, c, i, j);
+      lcd.print(c);
+      lcd.setCursor(n - 1, scrollingRow);
+      lcd.print(' ');
+    }
+    n--;
+    if (n > 0)
+    {
+      delay(v);
     }
   }
+}
 
-  /* This procedure makes a char substring based on indexes from a given char string stored in progmem.
+/* This procedure makes a char substring based on indexes from a given char string stored in progmem.
    The caller have to set its own buffer and pass its reference
    to the procedure. The procedure will fill the buffer with
    desired substring based on given indexes. Caller buffer size have
@@ -537,14 +538,14 @@ void triviaLoop()
     int inf: lower bound, included
     int sup: upper bound, excluded
 */
-  void flashCharSubstring(const char *str, char *buf, int inf, int sup)
+void flashCharSubstring(const char *str, char *buf, int inf, int sup)
+{
+  int l = sup - inf;
+  for (int i = 0; i < l; i++)
   {
-    int l = sup - inf;
-    for (int i = 0; i < l; i++)
-    {
-      buf[i] = pgm_read_byte_near(&str[i + inf]);
-    }
-    buf[l] = '\0';
+    buf[i] = pgm_read_byte_near(&str[i + inf]);
   }
+  buf[l] = '\0';
+}
 
 #pragma endregion
