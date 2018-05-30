@@ -332,7 +332,7 @@ void triviaLoop()
   }
   else if (appData == 1)
   {
-    displayText("Queen’s age?", "[1]  [Home]  [2]", 105);
+    displayText("Queen’s age?", "[92]      [73]", 105);
     if (buttonPress(leftBtn)) {
       delay(50);
       appData = 2;
