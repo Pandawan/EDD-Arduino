@@ -342,9 +342,10 @@ void triviaLoop()
   }
   else if (appData == 1)
   {
-    displayText("Queen's age?", "[92]         [73]", 101);
+    displayText("Queen's age?", "[92]        [73]", 101);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 2;
     }
@@ -376,9 +377,10 @@ void triviaLoop()
   }
   else if (appData == 4)
   {
-    displayText("# of US States?", "[9]          [50]", 104);
+    displayText("# of US States?", "[9]         [50]", 104);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 5;
     }
@@ -408,15 +410,17 @@ void triviaLoop()
       appData = 7;
     }
   }
-   else if (appData == 7)
+  else if (appData == 7)
   {
-    displayText("Sohail's fav #", "[100]         [0]", 107);
+    displayText("Sohail's fave #", "[100]        [0]", 107);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 8;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 9;
     }
@@ -457,7 +461,8 @@ void guideLoop()
   {
     displayText("Console Guide", "Press [R]", 200);
     delay(100);
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 1;
     }
@@ -466,11 +471,13 @@ void guideLoop()
   {
     displayText("[L] = Back", "[R] = Next", 201);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 0;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 2;
     }
@@ -479,11 +486,13 @@ void guideLoop()
   {
     displayText("[L] and [R] are", "app buttons,", 202);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 1;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 3;
     }
@@ -492,11 +501,13 @@ void guideLoop()
   {
     displayText("they are used", "to navigate ", 203);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 2;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 4;
     }
@@ -505,11 +516,13 @@ void guideLoop()
   {
     displayText("through an app", "like this one.", 204);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 3;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 5;
     }
@@ -518,11 +531,13 @@ void guideLoop()
   {
     displayText("The middle btn", "is [Home]", 205);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 4;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 6;
     }
@@ -531,11 +546,13 @@ void guideLoop()
   {
     displayText("You can go back", "to home screen", 206);
     delay(100);
-    if (buttonPress(leftBtn)) {
+    if (buttonPress(leftBtn))
+    {
       delay(50);
       appData = 5;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 7;
     }
