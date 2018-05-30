@@ -4,36 +4,17 @@
 #define LCDWIDTH 16
 #define LCDHEIGHT 2
 
-// Start by defining the relationship between
-//       note, period, &  frequency.
-#define c 3830 // 261 Hz
-#define d 3400 // 294 Hz
-#define e 3038 // 329 Hz
-#define f 2864 // 349 Hz
-#define g 2550 // 392 Hz
-#define a 2272 // 440 Hz
-#define b 2028 // 493 Hz
-#define C 1912 // 523 Hz
-// Define a special note, 'R', to represent a rest
-#define R 0
-
 enum State
 {
   HOME,
   TRIVIA,
-  CREDITS
+  GUIDE
 };
 
 // Constant pins
 const int homeBtn = 8;
 const int rightBtn = 13;
 const int leftBtn = 7;
-const int speakerPin = 9;
-
-//const int marioMusic = [ e, e, e, c, e, g, g ];
-int marioMusic[] = {  C,  b,  g,  C,  b,   e,  R,  C,  c,  g, a, C };
-int marioBeats[]  = { 16, 16, 16,  8,  8,  16, 32, 16, 16, 16, 8, 8 }; 
-int MAX_COUNT = sizeof(marioMusic) / 2; // Melody length, for looping.
 
 // Which app is the console currently in
 State consoleState = HOME;
@@ -57,8 +38,6 @@ void setup()
   pinMode(homeBtn, INPUT);
   pinMode(rightBtn, INPUT);
   pinMode(leftBtn, INPUT);
-  // Speaker
-  pinMode(speakerPin, OUTPUT);
 
   // Setup LCD
   lcd.begin(LCDWIDTH, LCDHEIGHT);
@@ -71,7 +50,7 @@ void setup()
   consoleState = HOME;
 
   // Finish everything
-  delay(500);
+  delay(750);
   Serial.println("Done intializing.");
 }
 
@@ -84,6 +63,10 @@ void loop()
   {
   case HOME:
     homeLoop();
+    break;
+  case GUIDE:
+    homeButton();
+    guideLoop();
     break;
   case TRIVIA:
     homeButton();
@@ -262,7 +245,7 @@ void homeLoop()
     if (buttonPress(leftBtn))
     {
       delay(50);
-      appData = 2;
+      appData = 3;
     }
     if (buttonPress(rightBtn))
     {
@@ -270,10 +253,10 @@ void homeLoop()
       appData = 1;
     }
   }
-  // 1 = Trivia
+  // 1 = Guide
   else if (appData == 1)
   {
-    displayText("<    Trivia    >", "Test your mind", 1);
+    displayText("<    Guide     >", "Learn to use it", 2);
     delay(100);
     // If left/right buttons are clicked, switch between apps
     if (buttonPress(leftBtn))
@@ -291,13 +274,13 @@ void homeLoop()
     {
       delay(50);
       appData = 0;
-      consoleState = TRIVIA;
+      consoleState = GUIDE;
     }
   }
-  // 2 = Credits
+  // 2 = Trivia
   else if (appData == 2)
   {
-    displayText("Made by Reva", "Miguel, Sohail", 2);
+    displayText("<    Trivia    >", "Test your mind", 3);
     delay(100);
     // If left/right buttons are clicked, switch between apps
     if (buttonPress(leftBtn))
@@ -308,14 +291,39 @@ void homeLoop()
     if (buttonPress(rightBtn))
     {
       delay(50);
+      appData = 3;
+    }
+    // If home button is clicked, launch the app
+    else if (buttonPress(homeBtn))
+    {
+      delay(50);
+      appData = 0;
+      consoleState = TRIVIA;
+    }
+  }
+  // 3 = Credits
+  else if (appData == 3)
+  {
+    displayText("Made by Reva", "Miguel, Sohail", 4);
+    delay(100);
+    // If left/right buttons are clicked, switch between apps
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 2;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
       appData = 0;
     }
   }
   // If something went wrong...
   else
   {
-    displayText("Oops...", "Wrong Screen!", 3);
-    appData = 1;
+    displayText("Oops...", "Wrong Screen!", 99);
+    delay(1000);
+    appData = 0;
   }
 }
 
@@ -325,6 +333,7 @@ void triviaLoop()
   if (appData == 0)
   {
     displayText("Welcome 2 Trivia", "Press [L] or [R]", 100);
+    delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
@@ -333,7 +342,7 @@ void triviaLoop()
   }
   else if (appData == 1)
   {
-    displayText("Queen's age?", "[92]      [73]", 105);
+    displayText("Queen's age?", "[92]         [73]", 101);
     delay(100);
     if (buttonPress(leftBtn)) {
       delay(50);
@@ -347,7 +356,7 @@ void triviaLoop()
   }
   else if (appData == 2)
   {
-    displayText("Correct!", "", 101);
+    displayText("Correct!", "", 102);
     delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
@@ -357,7 +366,7 @@ void triviaLoop()
   }
   else if (appData == 3)
   {
-    displayText("Wrong!", "", 102);
+    displayText("Wrong!", "", 103);
     delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
@@ -367,7 +376,7 @@ void triviaLoop()
   }
   else if (appData == 4)
   {
-    displayText("# of US States?", "[1]  [Home]  [2]", 106);
+    displayText("# of US States?", "[9]          [50]", 104);
     delay(100);
     if (buttonPress(leftBtn)) {
       delay(50);
@@ -381,7 +390,7 @@ void triviaLoop()
   }
   else if (appData == 5)
   {
-    displayText("Wrong!", "", 103);
+    displayText("Wrong!", "", 105);
     delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
@@ -391,7 +400,7 @@ void triviaLoop()
   }
   else if (appData == 6)
   {
-    displayText("Correct!", "", 104);
+    displayText("Correct!", "", 106);
     delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
@@ -401,7 +410,7 @@ void triviaLoop()
   }
    else if (appData == 7)
   {
-    displayText("Sohail's fav #", "[1]  [Home]  [2]", 116);
+    displayText("Sohail's fav #", "[100]         [0]", 107);
     delay(100);
     if (buttonPress(leftBtn)) {
       delay(50);
@@ -414,7 +423,7 @@ void triviaLoop()
   }
   else if (appData == 8)
   {
-    displayText("Correct!", "", 110);
+    displayText("Correct!", "", 108);
     delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
@@ -424,13 +433,123 @@ void triviaLoop()
   }
   else if (appData == 9)
   {
-    displayText("Wrong!", "", 115);
+    displayText("Wrong!", "", 109);
     delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
       appData = 10;
     }
+  }
+  // If something went wrong...
+  else
+  {
+    displayText("Oops...", "Wrong Screen!", 199);
+    delay(1000);
+    appData = 0;
+  }
+}
+
+// Guide are id 200-299
+void guideLoop()
+{
+  if (appData == 0)
+  {
+    displayText("Console Guide", "Press [R]", 200);
+    delay(100);
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 1;
+    }
+  }
+  else if (appData == 1)
+  {
+    displayText("[L] = Back", "[R] = Next", 201);
+    delay(100);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 0;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 2;
+    }
+  }
+  else if (appData == 2)
+  {
+    displayText("[L] and [R] are", "app buttons,", 202);
+    delay(100);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 1;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 3;
+    }
+  }
+  else if (appData == 3)
+  {
+    displayText("they are used", "to navigate ", 203);
+    delay(100);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 2;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 4;
+    }
+  }
+  else if (appData == 4)
+  {
+    displayText("through an app", "like this one.", 204);
+    delay(100);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 3;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 5;
+    }
+  }
+  else if (appData == 5)
+  {
+    displayText("The middle btn", "is [Home]", 205);
+    delay(100);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 4;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 6;
+    }
+  }
+  else if (appData == 6)
+  {
+    displayText("You can go back", "to home screen", 206);
+    delay(100);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 5;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 7;
+    }
+  }
+  else if (appData == 7)
+  {
+    displayText("Press [Home] now", "to exit this app", 207);
+  }
+  // If something went wrong...
+  else
+  {
+    displayText("Oops...", "Wrong Screen!", 299);
+    delay(1000);
+    appData = 0;
   }
 }
 
