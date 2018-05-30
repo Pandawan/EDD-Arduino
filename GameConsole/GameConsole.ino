@@ -77,7 +77,7 @@ void loop()
   }
 }
 
-#pragma region Button Manager & Press/Release System
+#pragma region Button Manager &Press / Release System
 
 void buttonManager()
 {
@@ -113,7 +113,7 @@ void buttonManager()
     // Set it as pressed
     buttonState[1] = 1;
   }
-  else if (leftState && lastButtonState[0] == 1)
+  else if (leftState && lastButtonState[1] == 1)
   {
     // Set it as button hold
     buttonState[1] = 3;
@@ -137,7 +137,7 @@ void buttonManager()
     // Set it as pressed
     buttonState[2] = 1;
   }
-  else if (rightState && lastButtonState[0] == 1)
+  else if (rightState && lastButtonState[2] == 1)
   {
     // Set it as button hold
     buttonState[2] = 3;
@@ -284,11 +284,9 @@ void homeLoop()
     appData = 1;
   }
 }
-
 // Trivia are id 100-199
 void triviaLoop()
 {
-  // AppData 0 = Intro
   if (appData == 0)
   {
     displayText("Welcome 2 Trivia", "Press [L] or [R]", 100);
@@ -298,13 +296,18 @@ void triviaLoop()
       appData = 1;
     }
   }
-  // AppData 1 = Question 1
   else if (appData == 1)
   {
-    lcd.clear();
-    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("What is the capital of Djibouti? 1. Djibouti 2. Addis Ababa"), 0, 300, 2, 3);
+    displayText("QUESTION 1", "[1]  [Home]  [2]", 105);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 2;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 3;
+    }
   }
-  // AppData 2 = Wrong Answer 1
   else if (appData == 2)
   {
     displayText("Correct!", "", 101);
@@ -314,7 +317,6 @@ void triviaLoop()
       appData = 4;
     }
   }
-  // AppData 3 = Correct Answer 1
   else if (appData == 3)
   {
     displayText("Wrong!", "", 102);
@@ -324,13 +326,18 @@ void triviaLoop()
       appData = 4;
     }
   }
-  // AppData 4 = Question 2
   else if (appData == 4)
   {
-    lcd.clear();
-    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("What year was McDonald’s founded? 1. 1930 2. 1955"), 0, 300, 2, 3);
+    displayText("QUESTION 2", "[1]  [Home]  [2]", 106);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 5;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 6;
+    }
   }
-  // AppData 5 = Wrong Answer 2
   else if (appData == 5)
   {
     displayText("Wrong!", "", 103);
@@ -340,7 +347,6 @@ void triviaLoop()
       appData = 7;
     }
   }
-  // AppData 6 = Correct Answer 2
   else if (appData == 6)
   {
     displayText("Correct!", "", 104);
@@ -348,58 +354,6 @@ void triviaLoop()
     {
       delay(50);
       appData = 7;
-    }
-  }
-  // AppData 7 = Question 3
-  else if (appData == 7)
-  {
-    lcd.clear();
-    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("How long was the life sentence in Finland in 2012? 1. 29 2. 17"), 0, 300, 2, 3);
-  }
-  // AppData 8 = Wrong Answer 3
-  else if (appData == 8)
-  {
-    displayText("Wrong!", "", 105);
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
-    {
-      delay(50);
-      appData = 10;
-    }
-  }
-  // AppData 9 = Correct Answer 3
-  else if (appData == 9)
-  {
-    displayText("Correct!", "", 106);
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
-    {
-      delay(50);
-      appData = 10;
-    }
-  }
-  // AppData 10 = Question 4
-  else if (appData == 10)
-  {
-    lcd.clear();
-    pinAndScrollText((char *)F("[1]  [Home]  [2]"), 1, (char *)F("What animal lives the longest? 1. Ocean Quahog 2. Galapagos Turtoise"), 0, 300, 2, 3);
-  }
-  // AppData 11 = Correct Answer 4
-  else if (appData == 11)
-  {
-    displayText("Correct!", "", 107);
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
-    {
-      delay(50);
-      appData = 13;
-    }
-  }
-  // AppData 12 = Wrong Answer 4
-  else if (appData == 12)
-  {
-    displayText("Wrong!", "", 108);
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
-    {
-      delay(50);
-      appData = 13;
     }
   }
 }
@@ -456,36 +410,31 @@ void pinAndScrollText(char *pinnedText, int pinnedRow, char *scrollingText, int 
   flashCharSubstring(pinnedText, c, 0, l);
   lcd.setCursor(l % 2 == 0 ? LCDWIDTH / 2 - (l / 2) : LCDWIDTH / 2 - (l / 2) - 1, pinnedRow);
   lcd.print(c);
-  int wait = 0;
   while (n > 0)
   {
-    wait += 1;
-    if (wait > 5)
+    // Refresh button status
+    buttonManager();
+    // Check for Button press to exit it
+    if (buttonPress(homeBtn))
     {
-      // Refresh button status
-      buttonManager();
-      // Check for Button press to exit it
-      if (buttonPress(homeBtn))
-      {
-        delay(50);
-        appData = 0;
-        consoleState = HOME;
-        break;
-      }
-      // Check for left btn press
-      if (buttonPress(leftBtn))
-      {
-        delay(50);
-        appData = leftData;
-        break;
-      }
-      // Check for right btn press
-      if (buttonPress(rightBtn))
-      {
-        delay(50);
-        appData = rightData;
-        break;
-      }
+      delay(50);
+      appData = 0;
+      consoleState = HOME;
+      break;
+    }
+    // Check for left btn press
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = leftData;
+      break;
+    }
+    // Check for right btn press
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = rightData;
+      break;
     }
 
     // Regular logic
