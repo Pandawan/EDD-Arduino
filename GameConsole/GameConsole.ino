@@ -21,7 +21,7 @@ enum State
 {
   HOME,
   TRIVIA,
-  JUKEBOX
+  CREDITS
 };
 
 // Constant pins
@@ -44,18 +44,6 @@ int lastTextId;
 // Used by the button manager to figure out buttonPress and buttonRelease
 int buttonState[3];
 int lastButtonState[3];
-
-// Jukebox Variables
-int tone_ = 0;
-int beat = 0;
-long duration = 0;
-
-// Set overall tempo
-long tempo = 10000;
-// Set length of pause between notes
-int pause = 1000;
-// Loop variable to increase Rest length
-int rest_count = 100; //<-BLETCHEROUS HACK; See NOTES
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
@@ -100,10 +88,6 @@ void loop()
   case TRIVIA:
     homeButton();
     triviaLoop();
-    break;
-  case JUKEBOX:
-    homeButton();
-    jukeboxLoop();
     break;
   default:
     homeLoop();
@@ -272,14 +256,32 @@ void homeLoop()
   // 0 = immediately move to Trivia
   if (appData == 0)
   {
-    appData = 1;
+    displayText("< Game Console >", "", 1);
+    delay(100);
+    // If left/right buttons are clicked, switch between apps
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 2;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 1;
+    }
   }
   // 1 = Trivia
   else if (appData == 1)
   {
     displayText("<    Trivia    >", "Test your mind", 1);
+    delay(100);
     // If left/right buttons are clicked, switch between apps
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 0;
+    }
+    if (buttonPress(rightBtn))
     {
       delay(50);
       appData = 2;
@@ -292,22 +294,21 @@ void homeLoop()
       consoleState = TRIVIA;
     }
   }
-  // 2 = Jukebox
+  // 2 = Credits
   else if (appData == 2)
   {
-    displayText("<   Jukebox  >", "Play music", 2);
+    displayText("Made by Reva", "Miguel, Sohail", 2);
+    delay(100);
     // If left/right buttons are clicked, switch between apps
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    if (buttonPress(leftBtn))
     {
       delay(50);
       appData = 1;
     }
-    // If home button is clicked, launch the app
-    else if (buttonPress(homeBtn))
+    if (buttonPress(rightBtn))
     {
       delay(50);
       appData = 0;
-      consoleState = JUKEBOX;
     }
   }
   // If something went wrong...
@@ -332,7 +333,8 @@ void triviaLoop()
   }
   else if (appData == 1)
   {
-    displayText("Queen’s age?", "[92]      [73]", 105);
+    displayText("Queen's age?", "[92]      [73]", 105);
+    delay(100);
     if (buttonPress(leftBtn)) {
       delay(50);
       appData = 2;
@@ -346,6 +348,7 @@ void triviaLoop()
   else if (appData == 2)
   {
     displayText("Correct!", "", 101);
+    delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
@@ -355,6 +358,7 @@ void triviaLoop()
   else if (appData == 3)
   {
     displayText("Wrong!", "", 102);
+    delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
@@ -364,6 +368,7 @@ void triviaLoop()
   else if (appData == 4)
   {
     displayText("# of US States?", "[1]  [Home]  [2]", 106);
+    delay(100);
     if (buttonPress(leftBtn)) {
       delay(50);
       appData = 5;
@@ -377,6 +382,7 @@ void triviaLoop()
   else if (appData == 5)
   {
     displayText("Wrong!", "", 103);
+    delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
@@ -386,6 +392,7 @@ void triviaLoop()
   else if (appData == 6)
   {
     displayText("Correct!", "", 104);
+    delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
@@ -395,6 +402,7 @@ void triviaLoop()
    else if (appData == 7)
   {
     displayText("Sohail's fav #", "[1]  [Home]  [2]", 116);
+    delay(100);
     if (buttonPress(leftBtn)) {
       delay(50);
       appData = 8;
@@ -407,6 +415,7 @@ void triviaLoop()
   else if (appData == 8)
   {
     displayText("Correct!", "", 110);
+    delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
@@ -416,70 +425,12 @@ void triviaLoop()
   else if (appData == 9)
   {
     displayText("Wrong!", "", 115);
+    delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
       appData = 10;
     }
-  }
-}
-
-// Jukebox
-void jukeboxLoop()
-{
-
-  // 0 = Show start screen
-  if (appData == 0)
-  {
-    displayText("Jukebox Player", "Press [L] or [R]", 100);
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
-    {
-      delay(50);
-      appData = 1;
-    }
-  }
-  // 1 = Song 1
-  else if (appData == 1)
-  {
-    displayText("<   Song 1   >", "A COOL SONG", 1);
-    // Play Mario Song
-    for (int i = 0; i < MAX_COUNT; i++)
-    {
-      // If left/right buttons are clicked, switch between apps
-      if (buttonPress(leftBtn) || buttonPress(rightBtn))
-      {
-        delay(50);
-        appData = 2;
-        break;
-      }
-
-      tone_ = marioMusic[i];
-      beat = marioBeats[i];
-
-      duration = beat * tempo; // Set up timing
-
-      playTone();
-      // A pause between notes...
-      delayMicroseconds(pause);
-    }
-  }
-  // 2 = Song 2
-  else if (appData == 2)
-  {
-    displayText("<   Song 2   >", "A COOL SONG", 1);
-    // PLAY A SONG
-    // If left/right buttons are clicked, switch between apps
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
-    {
-      delay(50);
-      appData = 1;
-    }
-  }
-  // If something went wrong...
-  else
-  {
-    displayText("Oops...", "Wrong Screen!", 3);
-    appData = 0;
   }
 }
 
@@ -495,39 +446,6 @@ void displayText(char topLine[], char botLine[], int textId)
     lcd.setCursor(0, 1);
     lcd.print(botLine);
     lastTextId = textId;
-  }
-}
-
-#pragma endregion
-
-#pragma region music
-
-void playTone()
-{
-  long elapsed_time = 0;
-  if (tone_ > 0)
-  { // if this isn't a Rest beat, while the tone has
-    //  played less long than 'duration', pulse speaker HIGH and LOW
-    while (elapsed_time < duration)
-    {
-
-      digitalWrite(speakerPin, HIGH);
-      delayMicroseconds(tone_ / 2);
-
-      // DOWN
-      digitalWrite(speakerPin, LOW);
-      delayMicroseconds(tone_ / 2);
-
-      // Keep track of how long we pulsed
-      elapsed_time += (tone_);
-    }
-  }
-  else
-  { // Rest beat; loop times delay
-    for (int j = 0; j < rest_count; j++)
-    { // See NOTE on rest_count
-      delayMicroseconds(duration);
-    }
   }
 }
 
