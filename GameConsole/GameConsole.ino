@@ -4,17 +4,36 @@
 #define LCDWIDTH 16
 #define LCDHEIGHT 2
 
+// Start by defining the relationship between
+//       note, period, &  frequency.
+#define c 3830 // 261 Hz
+#define d 3400 // 294 Hz
+#define e 3038 // 329 Hz
+#define f 2864 // 349 Hz
+#define g 2550 // 392 Hz
+#define a 2272 // 440 Hz
+#define b 2028 // 493 Hz
+#define C 1912 // 523 Hz
+// Define a special note, 'R', to represent a rest
+#define R 0
+
 enum State
 {
   HOME,
   TRIVIA,
-  ADVENTURE
+  JUKEBOX
 };
 
 // Constant pins
 const int homeBtn = 8;
 const int rightBtn = 13;
 const int leftBtn = 7;
+const int speakerPin = 9;
+
+//const int marioMusic = [ e, e, e, c, e, g, g ];
+int marioMusic[] = {  C,  b,  g,  C,  b,   e,  R,  C,  c,  g, a, C };
+int marioBeats[]  = { 16, 16, 16,  8,  8,  16, 32, 16, 16, 16, 8, 8 }; 
+int MAX_COUNT = sizeof(marioMusic) / 2; // Melody length, for looping.
 
 // Which app is the console currently in
 State consoleState = HOME;
@@ -25,6 +44,18 @@ int lastTextId;
 // Used by the button manager to figure out buttonPress and buttonRelease
 int buttonState[3];
 int lastButtonState[3];
+
+// Jukebox Variables
+int tone_ = 0;
+int beat = 0;
+long duration = 0;
+
+// Set overall tempo
+long tempo = 10000;
+// Set length of pause between notes
+int pause = 1000;
+// Loop variable to increase Rest length
+int rest_count = 100; //<-BLETCHEROUS HACK; See NOTES
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
@@ -38,6 +69,8 @@ void setup()
   pinMode(homeBtn, INPUT);
   pinMode(rightBtn, INPUT);
   pinMode(leftBtn, INPUT);
+  // Speaker
+  pinMode(speakerPin, OUTPUT);
 
   // Setup LCD
   lcd.begin(LCDWIDTH, LCDHEIGHT);
@@ -68,9 +101,9 @@ void loop()
     homeButton();
     triviaLoop();
     break;
-  case ADVENTURE:
+  case JUKEBOX:
     homeButton();
-    adventureLoop();
+    jukeboxLoop();
     break;
   default:
     homeLoop();
@@ -259,10 +292,10 @@ void homeLoop()
       consoleState = TRIVIA;
     }
   }
-  // 2 = Adventure
+  // 2 = Jukebox
   else if (appData == 2)
   {
-    displayText("<   Adventure  >", "Go on a quest", 2);
+    displayText("<   Jukebox  >", "Play music", 2);
     // If left/right buttons are clicked, switch between apps
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
@@ -274,7 +307,7 @@ void homeLoop()
     {
       delay(50);
       appData = 0;
-      consoleState = ADVENTURE;
+      consoleState = JUKEBOX;
     }
   }
   // If something went wrong...
@@ -284,6 +317,7 @@ void homeLoop()
     appData = 1;
   }
 }
+
 // Trivia are id 100-199
 void triviaLoop()
 {
@@ -303,7 +337,8 @@ void triviaLoop()
       delay(50);
       appData = 2;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 3;
     }
@@ -333,7 +368,8 @@ void triviaLoop()
       delay(50);
       appData = 5;
     }
-    if (buttonPress(rightBtn)) {
+    if (buttonPress(rightBtn))
+    {
       delay(50);
       appData = 6;
     }
@@ -356,43 +392,95 @@ void triviaLoop()
       appData = 7;
     }
   }
-   else if (appData == 8)
+   else if (appData == 7)
   {
     displayText("Sohail's fav #", "[1]  [Home]  [2]", 116);
     if (buttonPress(leftBtn)) {
       delay(50);
-      appData = 9;
+      appData = 8;
     }
     if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 9;
+    }
+  }
+  else if (appData == 8)
+  {
+    displayText("Correct!", "", 110);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
       delay(50);
       appData = 10;
     }
   }
   else if (appData == 9)
   {
-    displayText("Correct!", "", 110);
-    if (buttonPress(leftBtn) || buttonPress(rightBtn))
-    {
-      delay(50);
-      appData = 11;
-    }
-  }
-  else if (appData == 10)
-  {
     displayText("Wrong!", "", 115);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
-      appData = 11;
+      appData = 10;
     }
   }
-  
 }
 
-// Adventure are id 200-299
-void adventureLoop()
+// Jukebox
+void jukeboxLoop()
 {
-  displayText("Adventure App", "TODO", 200);
+
+  // 0 = Show start screen
+  if (appData == 0)
+  {
+    displayText("Jukebox Player", "Press [L] or [R]", 100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 1;
+    }
+  }
+  // 1 = Song 1
+  else if (appData == 1)
+  {
+    displayText("<   Song 1   >", "A COOL SONG", 1);
+    // Play Mario Song
+    for (int i = 0; i < MAX_COUNT; i++)
+    {
+      // If left/right buttons are clicked, switch between apps
+      if (buttonPress(leftBtn) || buttonPress(rightBtn))
+      {
+        delay(50);
+        appData = 2;
+        break;
+      }
+
+      tone_ = marioMusic[i];
+      beat = marioBeats[i];
+
+      duration = beat * tempo; // Set up timing
+
+      playTone();
+      // A pause between notes...
+      delayMicroseconds(pause);
+    }
+  }
+  // 2 = Song 2
+  else if (appData == 2)
+  {
+    displayText("<   Song 2   >", "A COOL SONG", 1);
+    // PLAY A SONG
+    // If left/right buttons are clicked, switch between apps
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 1;
+    }
+  }
+  // If something went wrong...
+  else
+  {
+    displayText("Oops...", "Wrong Screen!", 3);
+    appData = 0;
+  }
 }
 
 #pragma region Display Utilities
@@ -412,120 +500,35 @@ void displayText(char topLine[], char botLine[], int textId)
 
 #pragma endregion
 
-#pragma region Pin and Scroll Text
-/***** Using a sketch found online https://forum.arduino.cc/index.php?topic=216486.0 *****/
+#pragma region music
 
-/* This procedure pins a given text in the center of a desired row while scrolling from right to left another given text on another desired row.
-    Parameters:
-    char * pinnedText: pinned char string
-    int pinnedRow: desired row for pinned String
-    char * scrollingText: scrolling char string
-    int scrollingRow: desired row for scrolling String
-    int v = scrolling speed expressed in milliseconds
-*/
-void pinAndScrollText(char *pinnedText, int pinnedRow, char *scrollingText, int scrollingRow, int v, int leftData, int rightData)
+void playTone()
 {
-  if (pinnedRow == scrollingRow || pinnedRow < 0 || scrollingRow < 0 || pinnedRow >= LCDHEIGHT || scrollingRow >= LCDHEIGHT || strlen(pinnedText) > LCDWIDTH || v < 0)
-  {
-    lcd.clear();
-    lcd.print(F("Error pinScroll"));
-    while (1);
-  }
-  int l = strlen(pinnedText);
-  int ls = strlen(scrollingText);
-  int x = LCDWIDTH;
-  int n = ls + x;
-  int i = 0;
-  int j = 0;
-  char c[ls + 1];
-  flashCharSubstring(pinnedText, c, 0, l);
-  lcd.setCursor(l % 2 == 0 ? LCDWIDTH / 2 - (l / 2) : LCDWIDTH / 2 - (l / 2) - 1, pinnedRow);
-  lcd.print(c);
-  while (n > 0)
-  {
-    // Refresh button status
-    buttonManager();
-    // Check for Button press to exit it
-    if (buttonPress(homeBtn))
+  long elapsed_time = 0;
+  if (tone_ > 0)
+  { // if this isn't a Rest beat, while the tone has
+    //  played less long than 'duration', pulse speaker HIGH and LOW
+    while (elapsed_time < duration)
     {
-      delay(50);
-      appData = 0;
-      consoleState = HOME;
-      break;
-    }
-    // Check for left btn press
-    if (buttonPress(leftBtn))
-    {
-      delay(50);
-      appData = leftData;
-      break;
-    }
-    // Check for right btn press
-    if (buttonPress(rightBtn))
-    {
-      delay(50);
-      appData = rightData;
-      break;
-    }
 
-    // Regular logic
-    if (x > 0)
-    {
-      x--;
-    }
-    lcd.setCursor(x, scrollingRow);
-    if (n > LCDWIDTH)
-    {
-      j++;
-      i = (j > LCDWIDTH) ? i + 1 : 0;
-      flashCharSubstring(scrollingText, c, i, j);
-      lcd.print(c);
-    }
-    else
-    {
-      i = i > 0 ? i + 1 : 0;
-      if (n == ls)
-      {
-        i++;
-      }
-      flashCharSubstring(scrollingText, c, i, j);
-      lcd.print(c);
-      lcd.setCursor(n - 1, scrollingRow);
-      lcd.print(' ');
-    }
-    n--;
-    if (n > 0)
-    {
-      delay(v);
-    }
-  }
-}
+      digitalWrite(speakerPin, HIGH);
+      delayMicroseconds(tone_ / 2);
 
-/* This procedure makes a char substring based on indexes from a given char string stored in progmem.
-   The caller have to set its own buffer and pass its reference
-   to the procedure. The procedure will fill the buffer with
-   desired substring based on given indexes. Caller buffer size have
-   to be at least big as desired substring length (plus null terminating char) of course.
-   As a general rule, caller buffer should be: char buf[strlen(str) + 1].
-   Example:
-   char * string = (char*)F("Hello world!"); // or char string[] = (char[])F("Hello world!");
-   char buf[strlen(string) + 1];
-   flashCharSubstring(string, buf, 0, 5);
-   Serial.println(buf); // output: "Hello"
-    Parameters:
-    const char *str: string from where to extract the substring
-    char *buf: reference of the caller buffer.
-    int inf: lower bound, included
-    int sup: upper bound, excluded
-*/
-void flashCharSubstring(const char *str, char *buf, int inf, int sup)
-{
-  int l = sup - inf;
-  for (int i = 0; i < l; i++)
-  {
-    buf[i] = pgm_read_byte_near(&str[i + inf]);
+      // DOWN
+      digitalWrite(speakerPin, LOW);
+      delayMicroseconds(tone_ / 2);
+
+      // Keep track of how long we pulsed
+      elapsed_time += (tone_);
+    }
   }
-  buf[l] = '\0';
+  else
+  { // Rest beat; loop times delay
+    for (int j = 0; j < rest_count; j++)
+    { // See NOTE on rest_count
+      delayMicroseconds(duration);
+    }
+  }
 }
 
 #pragma endregion
