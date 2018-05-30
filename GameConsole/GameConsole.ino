@@ -262,7 +262,7 @@ void homeLoop()
   // 2 = Adventure
   else if (appData == 2)
   {
-    displayText("<   Adventure  >", "Go on a quest", 2);
+    displayText("<   Jukebox  >", "Go on a quest", 2);
     // If left/right buttons are clicked, switch between apps
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
@@ -298,7 +298,7 @@ void triviaLoop()
   }
   else if (appData == 1)
   {
-    displayText("Queen’s age?", "[1]  [Home]  [2]", 105);
+    displayText("Queen’s age?", "[92]      [73]", 105);
     if (buttonPress(leftBtn)) {
       delay(50);
       appData = 2;
