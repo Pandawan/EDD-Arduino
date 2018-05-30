@@ -298,7 +298,7 @@ void triviaLoop()
   }
   else if (appData == 1)
   {
-    displayText("QUESTION 1", "[1]  [Home]  [2]", 105);
+    displayText("Queen’s age?", "[1]  [Home]  [2]", 105);
     if (buttonPress(leftBtn)) {
       delay(50);
       appData = 2;
@@ -328,7 +328,7 @@ void triviaLoop()
   }
   else if (appData == 4)
   {
-    displayText("QUESTION 2", "[1]  [Home]  [2]", 106);
+    displayText("# of US States?", "[1]  [Home]  [2]", 106);
     if (buttonPress(leftBtn)) {
       delay(50);
       appData = 5;
@@ -356,6 +356,37 @@ void triviaLoop()
       appData = 7;
     }
   }
+   else if (appData == 8)
+  {
+    displayText("Sohail's fav #", "[1]  [Home]  [2]", 116);
+    if (buttonPress(leftBtn)) {
+      delay(50);
+      appData = 9;
+    }
+    if (buttonPress(rightBtn)) {
+      delay(50);
+      appData = 10;
+    }
+  }
+  else if (appData == 9)
+  {
+    displayText("Correct!", "", 110);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 11;
+    }
+  }
+  else if (appData == 10)
+  {
+    displayText("Wrong!", "", 115);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 11;
+    }
+  }
+  
 }
 
 // Adventure are id 200-299
