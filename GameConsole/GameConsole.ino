@@ -561,7 +561,7 @@ void triviaLoop()
   }
   else if (appData == 19)
   {
-    displayText("Reva's height?", "[5'1\"]    [4'11\"]", 116);
+    displayText("Reva's height?", "[5'1\"]   [4'11\"]", 116);
     delay(100);
     if (buttonPress(leftBtn))
     {
@@ -597,17 +597,17 @@ void triviaLoop()
   }
   else if (appData == 22)
   {
-    displayText("Mig's fav color?", "[Yellow]    [Blue]", 119);
+    displayText("Mig's fav color?", "[Yellow]  [Blue]", 119);
     delay(100);
     if (buttonPress(leftBtn))
     {
       delay(50);
-      appData = 24;
+      appData = 23;
     }
     if (buttonPress(rightBtn))
     {
       delay(50);
-      appData = 23;
+      appData = 24;
     }
   }
   else if (appData == 24)
@@ -617,7 +617,7 @@ void triviaLoop()
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
-      appData = 19;
+      appData = 25;
       triviaScore += 1;
     }
   }
@@ -653,7 +653,7 @@ void triviaLoop()
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
-      appData = 19;
+      appData = 28;
       triviaScore += 1;
     }
   }
@@ -670,7 +670,7 @@ void triviaLoop()
   }
   else if (appData == 28)
   {
-    displayText("Espero que coma", "[Not Subj]    [Subj]", 130);
+    displayText("Espero que coma", "[No Subj] [Subj]", 130);
     delay(100);
     if (buttonPress(leftBtn))
     {
