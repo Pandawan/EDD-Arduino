@@ -20,6 +20,8 @@ const int leftBtn = 7;
 State consoleState = HOME;
 // The app gets one int to store all of it's data. Use it wisely
 int appData;
+// Trivia score
+int triviaScore;
 // Used by the displayText function to prevent displaying the same text
 int lastTextId;
 // Used by the button manager to figure out buttonPress and buttonRelease
@@ -363,6 +365,7 @@ void triviaLoop()
     {
       delay(50);
       appData = 4;
+      triviaScore += 1;
     }
   }
   else if (appData == 3)
@@ -408,6 +411,7 @@ void triviaLoop()
     {
       delay(50);
       appData = 7;
+      triviaScore += 1;
     }
   }
   else if (appData == 7)
@@ -433,6 +437,7 @@ void triviaLoop()
     {
       delay(50);
       appData = 10;
+      triviaScore += 1;
     }
   }
   else if (appData == 9)
@@ -479,6 +484,7 @@ void triviaLoop()
     {
       delay(50);
       appData = 13;
+      triviaScore += 1;
     }
   }
   else if (appData == 13)
@@ -504,6 +510,7 @@ void triviaLoop()
     {
       delay(50);
       appData = 16;
+      triviaScore += 1;
     }
   }
   else if (appData == 15)
@@ -519,9 +526,14 @@ void triviaLoop()
   // If something went wrong...
   else
   {
-    displayText("Oops...", "Wrong Screen!", 199);
-    delay(1000);
-    appData = 0;
+    displayText("Nice job!", "Score: ", 199);
+    lcd.setCursor(7, 1);
+    lcd.print(triviaScore);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 0;
+    }
   }
 }
 
