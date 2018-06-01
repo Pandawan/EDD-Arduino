@@ -453,7 +453,7 @@ void triviaLoop()
 
   else if (appData == 10)
   {
-    displayText("x+7x=8", "[2]        [1]", 110);
+    displayText("x+7x=8", "[2]          [1]", 110);
     delay(100);
     if (buttonPress(leftBtn))
     {
@@ -523,9 +523,9 @@ void triviaLoop()
       appData = 16;
     }
   }
-   else if (appData == 16)
+  else if (appData == 16)
   {
-    displayText(" -4x-3>=1", "[x=< -1]    [x>=1]", 113);
+    displayText("-4x-3>=1", "[x=<-1]   [x>=1]", 113);
     delay(100);
     if (buttonPress(leftBtn))
     {
@@ -559,9 +559,9 @@ void triviaLoop()
       appData = 19;
     }
   }
-   else if (appData == 19)
+  else if (appData == 19)
   {
-    displayText("Reva's height?", "[5'1'']    [4'11'']", 116);
+    displayText("Reva's height?", "[5'1\"]    [4'11\"]", 116);
     delay(100);
     if (buttonPress(leftBtn))
     {
@@ -574,7 +574,7 @@ void triviaLoop()
       appData = 21;
     }
   }
-  else if (appData ==20 )
+  else if (appData == 20)
   {
     displayText("Correct!", "", 117);
     delay(100);
@@ -595,7 +595,7 @@ void triviaLoop()
       appData = 22;
     }
   }
-   else if (appData == 22)
+  else if (appData == 22)
   {
     displayText("Mig's fav color?", "[Yellow]    [Blue]", 119);
     delay(100);
@@ -610,7 +610,7 @@ void triviaLoop()
       appData = 23;
     }
   }
-  else if (appData ==24 )
+  else if (appData == 24)
   {
     displayText("Correct!", "", 120);
     delay(100);
@@ -631,7 +631,7 @@ void triviaLoop()
       appData = 25;
     }
   }
-     else if (appData == 25)
+  else if (appData == 25)
   {
     displayText("Warmuth's fav?", "[Not me]    [Me]", 123);
     delay(100);
@@ -646,7 +646,7 @@ void triviaLoop()
       appData = 27;
     }
   }
-  else if (appData ==26 )
+  else if (appData == 26)
   {
     displayText("Correct!", "", 125);
     delay(100);
@@ -665,9 +665,10 @@ void triviaLoop()
     {
       delay(50);
       appData = 28;
+      triviaScore += 1;
     }
   }
-      else if (appData == 28)
+  else if (appData == 28)
   {
     displayText("Espero que coma", "[Not Subj]    [Subj]", 130);
     delay(100);
@@ -682,7 +683,7 @@ void triviaLoop()
       appData = 29;
     }
   }
-  else if (appData ==29 )
+  else if (appData == 29)
   {
     displayText("Correct!", "", 131);
     delay(100);
@@ -695,12 +696,12 @@ void triviaLoop()
   }
   else if (appData == 30)
   {
-    displayText("Correct!", "", 134);
+    displayText("Wrong!", "", 134);
     delay(100);
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
-      appData = 31 ;
+      appData = 31;
     }
   }
   // If something went wrong...
@@ -709,6 +710,7 @@ void triviaLoop()
     displayText("Nice job!", "Score: ", 199);
     lcd.setCursor(7, 1);
     lcd.print(triviaScore);
+    lcd.print("/10");
     if (buttonPress(leftBtn) || buttonPress(rightBtn))
     {
       delay(50);
