@@ -445,7 +445,7 @@ void triviaLoop()
       appData = 10;
     }
   }
-  
+
   else if (appData == 10)
   {
     displayText("x+7x=8", "[2]        [1]", 110);
