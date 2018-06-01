@@ -445,6 +445,77 @@ void triviaLoop()
       appData = 10;
     }
   }
+  
+  else if (appData == 10)
+  {
+    displayText("x+7x=8", "[2]        [1]", 110);
+    delay(100);
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 11;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 12;
+    }
+  }
+  else if (appData == 11)
+  {
+    displayText("Wrong :(", "", 111);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 13;
+    }
+  }
+  else if (appData == 12)
+  {
+    displayText("Correct!", "", 112);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 13;
+    }
+  }
+  else if (appData == 13)
+  {
+    displayText("2(x+4)=9", "[1/2]        [1]", 110);
+    delay(100);
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 14;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 15;
+    }
+  }
+  else if (appData == 14)
+  {
+    displayText("Correct!", "", 111);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 16;
+    }
+  }
+  else if (appData == 15)
+  {
+    displayText("Wrong :(", "", 112);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 16;
+    }
+  }
   // If something went wrong...
   else
   {
