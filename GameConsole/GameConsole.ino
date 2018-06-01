@@ -523,6 +523,42 @@ void triviaLoop()
       appData = 16;
     }
   }
+   else if (appData == 16)
+  {
+    displayText(" -4x-3>=1", "[x=< -1]    [x>=1]", 113);
+    delay(100);
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 17;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 18;
+    }
+  }
+  else if (appData == 17)
+  {
+    displayText("Correct!", "", 114);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 19;
+      triviaScore += 1;
+    }
+  }
+  else if (appData == 18)
+  {
+    displayText("Wrong :(", "", 115);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 19;
+    }
+  }
   // If something went wrong...
   else
   {
