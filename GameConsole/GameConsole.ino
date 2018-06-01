@@ -559,6 +559,150 @@ void triviaLoop()
       appData = 19;
     }
   }
+   else if (appData == 19)
+  {
+    displayText("Reva's height?", "[5'1'']    [4'11'']", 116);
+    delay(100);
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 20;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 21;
+    }
+  }
+  else if (appData ==20 )
+  {
+    displayText("Correct!", "", 117);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 22;
+      triviaScore += 1;
+    }
+  }
+  else if (appData == 21)
+  {
+    displayText("Wrong :(", "", 118);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 22;
+    }
+  }
+   else if (appData == 22)
+  {
+    displayText("Mig's fav color?", "[Yellow]    [Blue]", 119);
+    delay(100);
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 24;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 23;
+    }
+  }
+  else if (appData ==24 )
+  {
+    displayText("Correct!", "", 120);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 19;
+      triviaScore += 1;
+    }
+  }
+  else if (appData == 23)
+  {
+    displayText("Wrong :(", "", 121);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 25;
+    }
+  }
+     else if (appData == 25)
+  {
+    displayText("Warmuth's fav?", "[Not me]    [Me]", 123);
+    delay(100);
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 26;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 27;
+    }
+  }
+  else if (appData ==26 )
+  {
+    displayText("Correct!", "", 125);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 19;
+      triviaScore += 1;
+    }
+  }
+  else if (appData == 27)
+  {
+    displayText("Correct!", "", 126);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 28;
+    }
+  }
+      else if (appData == 28)
+  {
+    displayText("Espero que coma", "[Not Subj]    [Subj]", 130);
+    delay(100);
+    if (buttonPress(leftBtn))
+    {
+      delay(50);
+      appData = 30;
+    }
+    if (buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 29;
+    }
+  }
+  else if (appData ==29 )
+  {
+    displayText("Correct!", "", 131);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 31;
+      triviaScore += 1;
+    }
+  }
+  else if (appData == 30)
+  {
+    displayText("Correct!", "", 134);
+    delay(100);
+    if (buttonPress(leftBtn) || buttonPress(rightBtn))
+    {
+      delay(50);
+      appData = 31 ;
+    }
+  }
   // If something went wrong...
   else
   {
